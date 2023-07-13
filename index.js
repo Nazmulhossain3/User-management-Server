@@ -55,6 +55,42 @@ async function run() {
 
     })
 
+    app.get('/users/:id', async(req,res)=> {
+
+        const id = req.query.id
+        console.log(id)
+        const query = {_id : new ObjectId(id)}
+        const result = usersCollection.findOne(query)
+        res.send(result)
+    })
+    
+
+
+
+
+
+    app.put('/users/:id', async(req,res)=> {
+
+       
+        const id = req.params.id
+        const filter = { _id : new ObjectId(id)}
+        const options = { upsert : true}
+        const users = req.body 
+        const updateUser = {
+
+            $set : {
+                name : users.name ,
+               email : users.email,
+               number : users.number ,
+               id : users.id
+
+            }
+        }
+
+        const result = await usersCollection.updateOne(filter,updateUser,options)
+        res.send(result)
+    })
+
 
 
 
